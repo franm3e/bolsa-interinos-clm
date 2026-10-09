@@ -4,7 +4,7 @@
   <img src="staticfiles/images/icon.png" alt="Bolsa Interinos CLM" width="300">
 </p>
 
-## Descripción
+## Descripción
 Bolsa Interinos CLM es una aplicación desarrollada en Python mediante el framework Django, diseñada para consultar y gestionar la información de las bolsas de interinos del cuerpo de maestros de la Junta de Comunidades de Castilla-La Mancha.
 
 La aplicación permite consultar la posición de cada aspirante en la bolsa durante cualquier fecha del curso escolar en vigor, comparar su evolución histórica y analizar los cambios en su posición. Además, ofrece opciones de filtrado por provincias, especialidades e idiomas, facilitando el seguimiento personalizado de la situación de cada aspirante.
@@ -13,7 +13,7 @@ La aplicación permite consultar la posición de cada aspirante en la bolsa dura
   <img src="staticfiles/images/preview.jpg" alt="Vista previa de la aplicación" width="300">
 </p>
 
-## Stack Tecnológico
+## Stack Tecnológico
 
 La aplicación usa un stack Python con Django 4.2 como backend principal, junto con Django REST Framework para la API, PostgreSQL/PostGIS como base de datos geoespacial, HTML/CSS/JavaScript con templates Django para la parte web, y Gunicorn para servir la app en producción con despliegue compatible con Heroku; además incorpora librerías como CKEditor, WhiteNoise, CORS, filtros y utilidades para scraping y procesamiento de datos PDF/Excel.
 
