@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+
+    <title>Bolsa Educación Interinos CLM</title>
+
+    {% include 'imports.html' %}
+
+    <script src="{% static 'js/ag-grid-locale-es.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/index.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/navbar.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+
+    <script>
+        const API_BASE_URL = "{{ api_base_url }}";
+    </script>
+</head>
+<body class="d-flex flex-column vh-100" data-cuerpo="{{ cuerpo }}" data-especialidad="{{ especialidad }}" data-fecha="{{ fecha }}">
+    {% include 'navbar.html' with selected="lista-interinos" %}
+
+    <div class="container-fluid py-2 px-3 d-flex flex-column flex-grow-1">
+        <div class="row">
+            <div class="col-auto d-flex justify-content-center align-items-center">
+                <div class="alert alert-warning mb-2" role="alert">
+                    Aviso: el 30 de junio la aplicación dejará de estar disponible con motivo del cierre del servicio tras la finalización del periodo de adjudicaciones del curso 2025/26. Gracias por su confianza.
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-auto d-flex justify-content-center align-items-center">
+                <div id="fechasSpinner" class="spinner-border spinner-border-sm text-primary me-2" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+                <select id="actualizacion-select" class="form-select form-select-sm" aria-label="Actualización">
+                    <option>Cargando fechas...</option>
+                </select>
+            </div>
+        </div>
+        <div class="row my-2">
+            <div class="col-12 col-md-auto mb-2 mb-md-0 d-flex justify-content-center align-items-center">
+                <div id="cuerposSpinner" class="spinner-border spinner-border-sm text-primary me-2" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+                <select id="cuerpo-select" class="form-select" aria-label="Cuerpo">
+                    <option>Cargando cuerpos...</option>
+                </select>
+            </div>
+            <div class="col-12 col-md-auto d-flex justify-content-center align-items-center">
+                <div id="especialidadesSpinner" class="spinner-border spinner-border-sm text-primary me-2" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+                <select id="especialidad-select" class="form-select" aria-label="Especialidad">
+                    <option>Cargando especialidades...</option>
+                </select>
+            </div>
+        </div>
+        <div class="row my-2 flex-grow-1">
+            <div class="col d-flex flex-column">
+                <div class="ms-2 mb-2 d-flex align-items-center">
+                    <div style="width: 12px; height: 12px; background-color: #d1e7dd; border: 1px solid #0f5132; margin-right: 8px;"></div>
+                    <p class="fs-6 mb-0 text-secondary-emphasis"><small>Aspirantes adjudicados</small></p>
+                </div>
+                <div id="myGrid" class="w-100 flex-grow-1"></div>
+            </div>
+         </div>
+    </div>
+</body>
+</html>

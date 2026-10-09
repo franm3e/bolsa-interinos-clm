@@ -1,0 +1,8 @@
+:root {
+  --bs-primary: #012853
+  --bs-primary-rgb: 1, 40, 83;
+}
+
+.fila-adjudicado {
+    background-color: #d4edda;
+}

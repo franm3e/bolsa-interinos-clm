@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+
+    <title>Bolsa Educación Interinos CLM</title>
+
+    {% include 'imports.html' %}
+
+    <script type="module" src="{% static 'js/detalle-interino.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/navbar.js' %}"></script>
+
+    <script>
+        const API_BASE_URL = "{{ api_base_url }}";
+    </script>
+</head>
+<body data-nombre="{{ nombre }}" data-apellidos="{{ apellidos }}" data-dni="{{ dni }}" data-cuerpo="{{ cuerpo }}" data-especialidad="{{ especialidad }}" data-fecha="{{ fecha }}">
+    {% include 'navbar.html' %}
+
+    <div class="container-fluid py-2">
+        <div id="div-volver" class="row mb-3 d-none">
+            <div class="col-auto d-flex justify-content-center align-items-center">
+                <button id="div-volver-btn" href="{% url 'index' %}?page=2&categoria=ropa" type="button" class="btn btn-sm rounded-2" style="border: 1px solid #e9ecef; background-color: #FFFFFF; color: #343a40;"><i class="bi bi-arrow-left"></i> Volver a la lista</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-auto d-flex justify-content-center align-items-center">
+                <h2 class="mb-1">{{ nombre }} {{ apellidos }}</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-auto d-flex justify-content-center align-items-center">
+                <h6 class="text-body-secondary">{{ dni }}</h6>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-auto">
+                <table class="table table-sm table-borderless m-0">
+                    <tbody>
+                        <tr>
+                            <th scope="row" style="width: 1%;">Idiomas:</th>
+                            <td id="div-idiomas"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-sm table-borderless mb-1">
+                    <tbody>
+                        <tr>
+                            <th scope="row">Posición bolsa general:</th>
+                            <td id="posicion-bolsa-general"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row py-3" style="background-color: #01285312;">
+            <div class="col-12 col-md-auto mb-2 mb-md-0 d-flex justify-content-center align-items-center">
+                <div id="fechasSpinner" class="spinner-border spinner-border-sm text-primary me-2" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <select id="actualizacion-select" class="form-select" aria-label="Actualización">
+                    <option>Cargando fechas...</option>
+                </select>
+            </div>
+            <div class="col-12 col-md-auto d-flex justify-content-center align-items-center">
+                <div id="especialidadesSpinner" class="spinner-border spinner-border-sm text-primary me-2" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <select id="especialidad-select" class="form-select" aria-label="Especialidad">
+                    <option>Cargando especialidades...</option>
+                </select>
+            </div>
+        </div>
+        <div id="container-posiciones" class="d-none toggle-posicion">
+            <div id="div-posiciones">
+                <div class="row mt-1">
+                    <div class="col-auto">
+                        <table class="table table-sm table-borderless">
+                            <tbody>
+                                <tr>
+                                    <th scope="row">
+                                        Posición general especialidad:
+                                    </th>
+                                    <td id="posicion-general-especialidad"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row py-2">
+                    <div class="col-12" id="tabla-posiciones">
+
+                    </div>
+                    <div class="col-12">
+                        <p><small>* Provincias ordenadas por preferencia</small></p>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <p class="h4"><u class="link-underline link-offset-2 link-underline-opacity-25">Posición bilingüe </u></p>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <div class="mb-2 d-flex align-items-center">
+                            <div style="width: 13px; height: 13px; background-color: #cfe2ff; border: 1px solid #084298; margin-right: 8px;"></div>
+                            <small class="mb-0 text-secondary-emphasis">Idioma habilitado</small>
+                        </div>
+                        <table id="tabla-posiciones-idiomas" class="table table-bordered table-striped mb-1">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Provincia</th>
+                                    <th scope="col" style="white-space: nowrap; width: 1%;">
+                                        <img src="https://flagcdn.com/20x15/gb.png" srcset="https://flagcdn.com/40x30/gb.png 2x, https://flagcdn.com/60x45/gb.png 3x"
+                                        alt="Inglés" class="ms-1" width="20" height="15"/>
+                                    </th>
+                                    <th scope="col" style="white-space: nowrap; width: 1%;">
+                                        <img src="https://flagcdn.com/20x15/fr.png" srcset="https://flagcdn.com/40x30/fr.png 2x, https://flagcdn.com/60x45/fr.png 3x"
+                                        alt="Francés" class="ms-1" width="20" height="15"/>
+                                    </th>
+                                    <th scope="col" style="white-space: nowrap; width: 1%;">
+                                        <img src="https://flagcdn.com/20x15/it.png" srcset="https://flagcdn.com/40x30/it.png 2x, https://flagcdn.com/60x45/it.png 3x"
+                                        alt="Italiano" class="ms-1" width="20" height="15"/>
+                                    </th>
+                                    <th scope="col" style="white-space: nowrap; width: 1%;">
+                                        <img src="https://flagcdn.com/20x15/de.png" srcset="https://flagcdn.com/40x30/de.png 2x, https://flagcdn.com/60x45/de.png 3x"
+                                         alt="Alemán" class="ms-1" width="20" height="15"/>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-12">
+                        <p><small>* Habilitados delante de ti con idioma </small></p>
+                    </div>
+                </div>
+            </div>
+            <div id="div-adjudicado" class="row mt-4 d-none">
+                <div class="col">
+                    <h5><span class="badge text-bg-success mb-2">ADJUDICADO</span></h5>
+                    <div class="card border-success mb-3">
+                        <div class="card-body">
+                            <h3 id="plaza-centro" class="card-title text-success"></h3>
+                            <p id="plaza-localidad" class="card-subtitle mb-3"></p>
+                            <p id="plaza-telefonos" class="card-subtitle mb-2"></p>
+                            <table class="table m-0">
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Cuerpo:</th>
+                                        <td id="plaza-cuerpo"></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Especialidad:</th>
+                                        <td id="plaza-especialidad"></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Función:</th>
+                                        <td id="plaza-funcion"></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Jornada:</th>
+                                        <td id="plaza-jornada"></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Fecha inicio:</th>
+                                        <td id="plaza-desde"></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Fecha fin:</th>
+                                        <td id="plaza-hasta"></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Puesto:</th>
+                                        <td id="plaza-puesto"></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Programa:</th>
+                                        <td id="plaza-programa"></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Competencia:</th>
+                                        <td id="plaza-competencia"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="toggle-posicion">
+            <div class="d-flex flex-column align-items-center my-5">
+                <div class="spinner-border text-primary mb-2" role="status">
+                    <span class="visually-hidden">Cargando posiciones...</span>
+                </div>
+                <div class="text-body-secondary small">Cargando posiciones...</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

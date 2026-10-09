@@ -1,0 +1,15 @@
+#filtrar-modal.fade .modal-dialog {
+  transform: translateY(100%);
+  transition: transform 0.3s ease-out;
+}
+#filtrar-modal.show .modal-dialog {
+  transform: translateY(0);
+}
+
+#especialidad-modal.fade .modal-dialog {
+  transform: translateX(100%);
+  transition: transform 0.2s ease-out;
+}
+#especialidad-modal.show .modal-dialog {
+  transform: translateX(0);
+}

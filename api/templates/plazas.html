@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+
+    <title>Bolsa Educación Interinos CLM</title>
+
+    {% include 'imports.html' %}
+
+    <script src="{% static 'js/ag-grid-locale-es.js' %}"></script>
+    <script type="module" src="{% static 'js/plazas.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/navbar.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/plazas.css' %}">
+
+    <script>
+        const API_BASE_URL = "{{ api_base_url }}";
+    </script>
+</head>
+<body class="d-flex flex-column vh-100">
+    {% include 'navbar.html' with selected="plazas" %}
+    <div class="container-fluid px-3 py-2 d-flex flex-column flex-grow-1">
+        <div class="row mb-2">
+            <div class="col-auto d-flex justify-content-center align-items-center">
+                <div id="fechasSpinner" class="spinner-border spinner-border-sm text-primary me-2" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+                <select id="actualizacion-select" class="form-select form-select-sm" aria-label="Actualización">
+                    <option>Cargando fechas...</option>
+                </select>
+            </div>
+            <!--
+            <div class="col-auto d-flex justify-content-center align-items-center">
+                <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#filtrar-modal">
+                    <i class="bi bi-filter"></i>
+                    Filtrar
+                </button>
+            </div>
+            -->
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-12 col-md-auto mb-2 mb-md-0 d-flex justify-content-center align-items-center">
+                <div id="funcionSpinner" class="spinner-border spinner-border-sm text-primary me-2" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+                <select id="funcion-select" class="form-select" multiple aria-label="Función" size="3">
+                    <option>Cargando funciones...</option>
+                </select>
+            </div>
+            <div class="col-12 col-md-auto d-flex justify-content-center align-items-center">
+                <div id="provinciaSpinner" class="spinner-border spinner-border-sm text-primary me-2" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+                <select id="provincia-select" class="form-select" multiple aria-label="Provincia" size="3">
+                    <option>Cargando provincias...</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row mb-2 d-none toggle-posicion">
+            <div class="col-12 mb-2">
+                <table class="table table-sm table-borderless mb-1">
+                    <tbody>
+                        <tr>
+                            <th class="p-0">
+                                <small>Total plazas listadas: <span id="total-plazas" style="font-weight: normal;"></span></small>
+                            </th>
+                        </tr>
+                        <tr class="mb-2">
+                            <th class="p-0">
+                                <small>Ceses previstos: <span id="total-ceses" style="font-weight: normal;"></span></small>
+                            </th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-auto d-flex justify-content-center align-items-center">
+                <div id="div-plazas" class="row row-cols-1 g-3">
+                </div>
+            </div>
+        </div>
+        <div class="toggle-posicion">
+            <div class="d-flex flex-column align-items-center my-5">
+                <div class="spinner-border text-primary mb-2" role="status">
+                    <span class="visually-hidden">Cargando posiciones...</span>
+                </div>
+                <div class="text-body-secondary small">Cargando plazas disponibles...</div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="filtrar-modal" tabindex="-1" aria-labelledby="filtrarModalLabel">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content">
+                <div class="modal-header p-2">
+                    <a href="#" role="button" class="btn btn-sm btn-link text-dark text-decoration-none" data-bs-dismiss="modal">Cerrar</a>
+                    <h1 class="modal-title fs-6 m-0 text-center flex-grow-1" id="filtrarModalLabel">Filtrar</h1>
+                    <a href="#" role="button" class="btn btn-sm btn-link text-dark text-decoration-none">Borrar todos</a>
+                </div>
+                <div class="modal-body p-0 bg-body-secondary">
+                    <div class="list-group list-group-flush">
+                        <button type="button" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center disabled" data-bs-toggle="modal" data-bs-target="#funcion-modal">
+                            <span>Ordenar por</span>
+                            <span class="d-flex align-items-center">
+                            <smal>Próximamente...</smal>
+                            <!-- <i class="bi bi-chevron-right ms-2"></i> -->
+                            </span>
+                        </button>
+                        <button type="button" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center mt-3" data-bs-toggle="modal" data-bs-target="#funcion-modal">
+                            <span>Función</span>
+                            <span class="d-flex align-items-center">
+                            Todo
+                            <i class="bi bi-chevron-right ms-2"></i>
+                            </span>
+                        </button>
+                        <button type="button" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" data-bs-toggle="modal" data-bs-target="#provincia-modal">
+                            <span>Provincia</span>
+                            <span class="d-flex align-items-center">
+                            Todo
+                            <i class="bi bi-chevron-right ms-2"></i>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-primary w-100">Ver resultados</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="funcion-modal" tabindex="-1" aria-labelledby="funcionModalLabel">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content">
+                <div class="modal-header p-2">
+                    <a href="#" role="button" class="btn btn-sm btn-link text-dark text-decoration-none" data-bs-toggle="modal" data-bs-target="#filtrar-modal">Volver</a>
+                    <h1 class="modal-title fs-6 m-0 text-center flex-grow-1" id="funcionModalLabel">Función</h1>
+                    <a href="#" role="button" class="btn btn-sm btn-link text-dark text-decoration-none">Borrar todos</a>
+                </div>
+                <div class="modal-body p-0">
+                    <ul id="filtrar-funcion-list" class="list-group">
+
+                        <li class="list-group-item">
+                            <input class="form-check-input me-1" type="checkbox" value="" id="secondCheckboxStretched">
+                            <label class="form-check-label stretched-link" for="secondCheckboxStretched">Second checkbox</label>
+                        </li>
+                        <li class="list-group-item">
+                            <input class="form-check-input me-1" type="checkbox" value="" id="thirdCheckboxStretched">
+                            <label class="form-check-label stretched-link" for="thirdCheckboxStretched">Third checkbox</label>
+                        </li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-sm btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="provincia-modal" tabindex="-1" aria-labelledby="provinciaModalLabel">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-6" id="provinciaModalLabel">Provincia</h1>
+                    <button type="button" class="btn-close" aria-label="Borrar"></button>
+                </div>
+                <div class="modal-body p-0">
+                    asfass
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-sm btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

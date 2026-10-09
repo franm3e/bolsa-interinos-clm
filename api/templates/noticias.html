@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+
+    <script type="text/javascript" src="{% static 'js/global.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/noticias.js' %}"></script>
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5114720014121335" crossorigin="anonymous"></script>
+
+    <title>Noticias - Bolsa Educación Interinos CLM</title>
+
+    {% include 'imports.html' %}
+</head>
+<body>
+
+
+    <div class="container-fluid">
+        <div class="row">
+            {% include 'navbar.html' %}
+        </div>
+        <div class="row d-none">
+            <div class="col">
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-5114720014121335"
+                     data-ad-slot="3602108168"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+        <div class="row my-5">
+            <div class="col">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+                    {% for noticia in noticias %}
+                        <div class='col'>
+                            <div class='card'>
+                                <img src='/staticfiles/images/categorias/{{ noticia.categoria.nombre }}.png' class='card-img-top' alt='...'>
+                                <div class='card-body'>
+                                    <h6><span class="badge text-secondary text-bg-light">{{ noticia.categoria|upper }}</span></h6>
+                                    <a href="{% url 'noticias-detalle' categoria=noticia.categoria.nombre slug=noticia.slug %}" class="link-underline link-underline-opacity-10">
+                                        <h5 class='card-title ps-1 text-justify'>{{ noticia.titulo }}</h5>
+                                    </a>
+                                    <p class="card-text ps-1">
+                                        <small class="text-body-secondary">{{ noticia.fecha_creacion|date:"j M Y"|upper }}</small>
+                                    </p>
+                                    <p class="card-text ps-1 text-justify">{{ noticia.resumen }}</p>
+
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- {% include 'footer.html' %} -->
+</body>
+</html>

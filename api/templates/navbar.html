@@ -1,0 +1,50 @@
+<nav id="mainNavbar" class="navbar sticky-top bg-transparent py-2 transition-navbar">
+  <div class="container-fluid d-flex align-items-center justify-content-between px-3">
+    <div class="d-flex align-items-center gap-2">
+      <button class="btn btn-link p-0 border-0 text-secondary d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler">
+        <i class="bi bi-list fs-4"></i>
+      </button>
+      <a class="navbar-brand d-flex align-items-center gap-2 m-0" href="/?version=2024/25">
+        <img src="/staticfiles/images/icon.png" alt="logo" height="36" class="rounded-circle">
+        <div class="d-flex flex-column lh-sm">
+          <span class="fw-semibold text-dark" style="font-size: 1rem;">Bolsa Interinos CLM </span>
+          <small class="text-secondary" style="font-size: 0.9rem;">2025/26</small>
+        </div>
+      </a>
+    </div>
+
+    <div class="container-fluid px-0">
+      <form class="d-flex position-relative mt-2 mb-1" role="search" autocomplete="off">
+        <input class="form-control" type="search" id="busqueda" placeholder="Buscar candidato..." aria-label="Buscar candidato">
+        <ul class="list-group position-absolute w-100 z-3 mt-2 d-none" id="sugerencias" style="top: 100%; max-height: 200px; overflow-y: auto;"></ul>
+        <div class="position-absolute top-50 end-0 translate-middle-y me-3 d-none" id="spinner-busqueda">
+          <div class="spinner-border spinner-border-sm text-secondary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="collapse navbar-collapse border-top mt-2" id="navbarToggler">
+      <ul class="navbar-nav px-0">
+        <li class="nav-item my-1">
+          <a class="nav-link {% if selected == 'lista-interinos' %}active{% endif %} px-2" href="{% url 'index' %}?version=2024/25">Listas interinos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if selected == 'plazas' %}active{% endif %} px-2" href="{% url 'plazas' %}">Plazas ofertadas</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<script>
+document.addEventListener("scroll", () => {
+  const navbar = document.getElementById("mainNavbar");
+  if (window.scrollY > 10) {
+    navbar.classList.add("scrolled");
+  } else {
+    navbar.classList.remove("scrolled");
+  }
+});
+</script>
